@@ -1,0 +1,70 @@
+load(7,1); //loading the exception handler
+load(8,2);
+
+load(23,17); //loading the interrupt 7 handler
+load(24,18);
+
+//making the entry for init program pid=0
+[READY_LIST + 0 * 32 + 0] = 0;
+
+//loading the init program -- user programs starts from 25
+
+load(25,21);
+load(26,22);
+load(27,23);
+//28 block is for stack
+
+PTBR = 1024; // PTBR = 1024 + PID * 8
+PTLR = 4; //Default by system
+
+[PTBR + 0] = 25;
+[PTBR + 1] = "01";
+[PTBR + 2] = 26;
+[PTBR + 3] = "01";
+[PTBR + 4] = 27;
+[PTBR + 5] = "01";
+[PTBR + 6] = 28;
+[PTBR + 7] = "01";
+
+[READY_LIST + 0 * 32 + 1] = 2;
+SP = 3 * 512; //stack at last block
+
+[28 * 512] = 0; //value of IP for user program
+
+//loading interrupt routine 1
+load(11,5);
+load(12,6);
+
+//loading timer interrupt routine
+load(9,3);
+load(10,4);
+
+//setting the process structure for second process
+
+[READY_LIST + 32] = 1;
+//only code block of exec file is 27
+load(29,27);
+
+alias PTBR_process1 S0;
+PTBR_process1 = 1024 + 1 * 8;
+
+[PTBR_process1 + 0] = 29;
+[PTBR_process1 + 1] = "01";
+[PTBR_process1 + 2] = -1;
+[PTBR_process1 + 3] = "00";
+[PTBR_process1 + 4] = -1;
+[PTBR_process1 + 5] = "00";
+[PTBR_process1 + 6] = 30;
+[PTBR_process1 + 7] = "01";
+
+[READY_LIST + 32 + 1] = 1;
+[READY_LIST + 32 + 2] = 3 * 512;
+[READY_LIST + 32 + 3] = 3 * 512;
+[READY_LIST + 32 + 4] = 0;
+[READY_LIST + 32 + 5] = PTBR_process1;
+[READY_LIST + 32 + 6] = 4;
+
+
+ireturn;
+
+
