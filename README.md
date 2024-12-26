@@ -1,5 +1,4 @@
-# Round-robin-scheduling-algorithm
-IN XOS
+# Round robin scheduling algorithm
 
 Round Robin is a scheduling algorithm used in operating systems and computer networking. It ensures that each process in a queue receives a fair share of CPU time by allocating CPU time slices to each process in a queue in a cyclic order. 
 
